@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Jugadores</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-users"></i> Gestión de Jugadores</h1>
+            <div class="user-actions">
+                <button id="theme-toggle" class="btn-theme">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <div class="user-info">
+                    <span>Hola, {{ username }}!</span>
+                    <a href="/logout" class="btn-logout"><i class="fas fa-sign-out-alt"></i> Salir</a>
+                </div>
+            </div>
+        </header>
+
+        <section class="card">
+            <div class="form-header">
+                <h2><i class="fas fa-plus-circle"></i> Nuevo Jugador</h2>
+                <button id="eliminar-todos" class="btn btn-danger">Eliminar Todos los Jugadores</button>
+            </div>
+            <div class="form-group">
+                <input type="text" id="nombre-jugador" placeholder="Nombre completo" required>
+            </div>
+            <div class="form-group">
+                <div class="image-input-container">
+                    <input type="text" id="imagen-jugador" placeholder="URL de imagen (opcional)">
+                    <div class="file-upload">
+                        <label for="file-upload" class="custom-file-upload">
+                            <i class="fas fa-upload"></i> Subir imagen
+                        </label>
+                        <input id="file-upload" type="file" accept="image/jpeg" style="display: none;">
+                    </div>
+                </div>
+                <div id="image-preview" class="image-preview"></div>
+            </div>
+            <div class="form-group">
+                <label>Habilidad:</label>
+                <div class="stars" id="rating-stars">
+                    {% for i in range(1, 11) %}
+                        <i class="far fa-star" data-rating="{{ i }}"></i>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="form-actions">
+                <button class="btn-primary" onclick="agregarJugador()">
+                    <i class="fas fa-save"></i> Guardar Jugador
+                </button>
+            </div>
+        </section>
+
+        <section class="jugadores-container" id="lista-jugadores">
+            <!-- Se llena dinámicamente con JavaScript -->
+        </section>
+
+        <section class="equipos-section">
+            <h2><i class="fas fa-users"></i> Generar Equipos</h2>
+            <button class="btn-primary" onclick="generarEquipos()">
+                <i class="fas fa-random"></i> Generar Equipos Balanceados
+            </button>
+            <div id="equipos-generados" class="equipos-container">
+                <!-- Se llena dinámicamente con JavaScript -->
+            </div>
+        </section>
+    </div>
+
+    <script src="/static/jugadores.js"></script>
+</body>
+</html>

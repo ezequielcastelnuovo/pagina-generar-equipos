@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Generador de Equipos</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="user-info">
+            <p>Hola, {{ username }}! <a href="/logout">Cerrar sesión</a></p>
+        </div>
+        <h1>Generador de Equipos ⚽</h1>
+        <textarea id="jugadores" placeholder="Jugador1, Jugador2..."></textarea>
+        <button onclick="generarEquipos()">Generar Equipos</button>
+        <div id="resultado"></div>
+    </div>
+    <script src="/static/script.js"></script>
+</body>
+</html>
