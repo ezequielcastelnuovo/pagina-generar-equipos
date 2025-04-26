@@ -7,7 +7,9 @@ services:
     buildCommand: pip install -r requirements.txt
     startCommand: gunicorn app:app  
     envVars:
-      - key: SECRET_KEY
-        value: b0n5a1b0n5a1
+  - key: SECRET_KEY
+    generateValue: true  
+  - key: DATABASE_URL
+    fromDatabase: true  
       - key: PYTHON_VERSION
         value: 3.9.13  
