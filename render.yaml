@@ -13,7 +13,7 @@ services:
         generateValue: true
       - key: DATABASE_URL
         fromDatabase:
-          name: pagina-generar-equipos-db
+          name: generador_equipos_db_user
           type: postgres
   - key: SECRET_KEY
     generateValue: true  
