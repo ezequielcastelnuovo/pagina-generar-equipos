@@ -133,6 +133,15 @@ def index():
 def generar_equipos():
     jugadores = Jugador.query.filter_by(user_id=current_user.id).all()
     
+    # Solo permitir equipos válidos
+    cant_jugadores = len(jugadores)
+    formatos_validos = [10, 12, 14, 16, 18, 22]
+    if cant_jugadores not in formatos_validos:
+        return jsonify({
+            "status": "error",
+            "message": "Error: cantidad de jugadores insuficiente o incorrecta. Solo se pueden generar equipos de 5vs5 (10 jugadores), 6vs6 (12), 7vs7 (14), 8vs8 (16), 9vs9 (18) o 11vs11 (22 jugadores)."
+        })
+    
     if len(jugadores) < 4:  # Mínimo 2 jugadores por equipo
         return jsonify({"status": "error", "message": "Se necesitan al menos 4 jugadores para generar equipos"})
     
