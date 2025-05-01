@@ -209,6 +209,18 @@ def generar_equipos():
         }
     })
 
+@app.route('/editar_jugador/<int:jugador_id>', methods=['PATCH'])
+@login_required
+def editar_jugador(jugador_id):
+    data = request.json
+    jugador = Jugador.query.get_or_404(jugador_id)
+    if jugador.user_id != current_user.id:
+        return jsonify({"status": "error", "message": "No tienes permiso para editar este jugador"}), 403
+    nuevo_rating = int(data.get('rating', jugador.rating))
+    jugador.rating = nuevo_rating
+    db.session.commit()
+    return jsonify({"status": "success", "nuevo_rating": jugador.rating})
+
 # Inicialización
 with app.app_context():
     db.create_all()

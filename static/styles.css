@@ -411,3 +411,51 @@ header {
 #imagen-jugador {
     flex-grow: 1;
 }
+
+.rating-line {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.1em;
+}
+
+.rating-number {
+    margin-left: 8px;
+    font-weight: bold;
+    color: var(--nombre-jugador-color);
+}
+
+.editor-rating {
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+
+.stars-edit {
+    margin-bottom: 10px;
+    display: flex;
+    gap: 4px;
+}
+
+.editor-rating button {
+    margin-top: 8px;
+    margin-bottom: 0;
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 6px 16px;
+    cursor: pointer;
+    font-size: 15px;
+    transition: background 0.2s;
+}
+
+.editor-rating button:hover {
+    background-color: #495057;
+}
+
+.btn-editar {
+    margin-bottom: 8px;
+}

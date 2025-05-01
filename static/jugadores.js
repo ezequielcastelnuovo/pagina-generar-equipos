@@ -52,13 +52,27 @@ function cargarJugadores() {
         .then(jugadores => {
             const container = document.getElementById('lista-jugadores');
             container.innerHTML = jugadores.map(jugador => `
-                <div class="card jugador-card">
+                <div class="card jugador-card" data-id="${jugador.id}">
                     <img src="${jugador.imagen}" alt="${jugador.nombre}" style="width:100px;height:100px;object-fit:cover;">
                     <h3>${jugador.nombre}</h3>
-                    <p>Rating: ${jugador.rating}/10</p>
+                    <p class="rating-line">Rating:
+                        <span class="jugador-rating-edit" data-rating="${jugador.rating}">
+                            ${'★'.repeat(jugador.rating)}${'☆'.repeat(10-jugador.rating)}
+                        </span>
+                        <span class="rating-number">${jugador.rating}/10</span>
+                    </p>
+                    <button class="btn-editar" onclick="mostrarEditorRating(${jugador.id}, ${jugador.rating})">
+                        <i class="fas fa-edit"></i> Editar
+                    </button>
                     <button class="btn-danger" onclick="eliminarJugador(${jugador.id})">
                         <i class="fas fa-trash-alt"></i> Eliminar
                     </button>
+                    <div class="editor-rating" id="editor-rating-${jugador.id}" style="display:none;">
+                        <div class="stars-edit">
+                            ${[...Array(10)].map((_,i) => `<i class='fa-star ${i < jugador.rating ? 'fas' : 'far'}' data-rating='${i+1}' onclick='editarRating(${jugador.id}, ${i+1})'></i>`).join('')}
+                        </div>
+                        <button onclick="ocultarEditorRating(${jugador.id})">Cancelar</button>
+                    </div>
                 </div>
             `).join('');
         });
@@ -174,6 +188,37 @@ function generarEquipos() {
     .catch(error => {
         console.error('Error:', error);
         alert('Error al generar los equipos');
+    });
+}
+
+// Agregar funciones para edición de rating
+function mostrarEditorRating(id, rating) {
+    document.getElementById(`editor-rating-${id}`).style.display = 'block';
+}
+
+function ocultarEditorRating(id) {
+    document.getElementById(`editor-rating-${id}`).style.display = 'none';
+}
+
+function editarRating(id, nuevoRating) {
+    fetch(`/editar_jugador/${id}`, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ rating: nuevoRating })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            cargarJugadores();
+        } else {
+            alert(data.message || 'Error al editar el rating');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error al editar el rating');
     });
 }
 
