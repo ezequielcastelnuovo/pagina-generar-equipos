@@ -187,27 +187,10 @@ def generar_equipos():
         
         return equipo1, equipo2, diferencia
     
-    # Generar combinaciones hasta encontrar un buen balance
-    mejor_diferencia = float('inf')
-    mejor_combinacion = None
-    
-    for _ in range(10):  # Intentar 10 veces diferentes combinaciones
-        equipo1, equipo2, diferencia = generar_combinaciones(jugadores_ordenados, [], 0, mejor_combinacion, mejor_diferencia)
-        if diferencia < mejor_diferencia:
-            mejor_diferencia = diferencia
-            mejor_combinacion = (equipo1, equipo2)
-    
-    # Si no se encontró una combinación válida, usar la distribución alternada
-    if mejor_combinacion is None:
-        equipo1 = []
-        equipo2 = []
-        for i, jugador in enumerate(jugadores_ordenados):
-            if i % 2 == 0:
-                equipo1.append(jugador)
-            else:
-                equipo2.append(jugador)
-    else:
-        equipo1, equipo2 = mejor_combinacion
+    # Dividir en dos equipos iguales directamente
+    mitad = len(jugadores_ordenados) // 2
+    equipo1 = jugadores_ordenados[:mitad]
+    equipo2 = jugadores_ordenados[mitad:]
     
     # Convertir los equipos al formato necesario
     equipo1_formato = [{
