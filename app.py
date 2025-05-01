@@ -6,6 +6,7 @@ from datetime import datetime
 from flask_migrate import Migrate
 import os
 import random
+import itertools
 
 
 app = Flask(__name__)
@@ -145,29 +146,32 @@ def generar_equipos():
     if len(jugadores) < 4:  # Mínimo 2 jugadores por equipo
         return jsonify({"status": "error", "message": "Se necesitan al menos 4 jugadores para generar equipos"})
     
-    # Mezclar un poco la lista para dar aleatoriedad, pero mantener el balance
-    jugadores_ordenados = sorted(jugadores, key=lambda x: x.rating, reverse=True)
-    for _ in range(3):  # Tres swaps aleatorios
-        i, j = random.sample(range(len(jugadores_ordenados)), 2)
-        jugadores_ordenados[i], jugadores_ordenados[j] = jugadores_ordenados[j], jugadores_ordenados[i]
+    # Mezclar para dar aleatoriedad
+    random.shuffle(jugadores)
 
-    equipo1 = []
-    equipo2 = []
-    snake = True
-    for idx, jugador in enumerate(jugadores_ordenados):
-        if snake:
-            if idx % 2 == 0:
-                equipo1.append(jugador)
-            else:
-                equipo2.append(jugador)
-        else:
-            if idx % 2 == 0:
-                equipo2.append(jugador)
-            else:
-                equipo1.append(jugador)
-        # Cambia el sentido cada vez que se llena una ronda
-        if (idx + 1) % (len(jugadores_ordenados) // 2) == 0:
-            snake = not snake
+    # Parámetros
+    num_intentos = 1000
+    mejor_diferencia = float('inf')
+    mejor_equipo1 = []
+    mejor_equipo2 = []
+    mitad = len(jugadores) // 2
+
+    for _ in range(num_intentos):
+        random.shuffle(jugadores)
+        equipo1 = jugadores[:mitad]
+        equipo2 = jugadores[mitad:]
+        rating1 = sum(j.rating for j in equipo1)
+        rating2 = sum(j.rating for j in equipo2)
+        diferencia = abs(rating1 - rating2)
+        if diferencia < mejor_diferencia:
+            mejor_diferencia = diferencia
+            mejor_equipo1 = list(equipo1)
+            mejor_equipo2 = list(equipo2)
+            if mejor_diferencia <= 5:  # Si ya es suficientemente balanceado, salimos
+                break
+
+    equipo1 = mejor_equipo1
+    equipo2 = mejor_equipo2
     
     # Convertir los equipos al formato necesario
     equipo1_formato = [{
