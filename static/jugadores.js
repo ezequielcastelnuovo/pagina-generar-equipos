@@ -27,6 +27,16 @@ function agregarJugador() {
             document.getElementById('nombre-jugador').value = '';
             document.getElementById('imagen-jugador').value = '';
             resetStars();
+            // Limpiar previsualización de imagen y el input de archivo
+            const imagePreview = document.getElementById('image-preview');
+            if (imagePreview) {
+                imagePreview.style.display = 'none';
+                imagePreview.innerHTML = '';
+            }
+            const fileUpload = document.getElementById('file-upload');
+            if (fileUpload) {
+                fileUpload.value = '';
+            }
         }
     })
     .catch(error => {
