@@ -227,19 +227,20 @@ document.addEventListener('DOMContentLoaded', function() {
     fileUpload.addEventListener('change', function(e) {
         const file = e.target.files[0];
         if (file) {
-            // Verificar que sea una imagen JPG
-            if (file.type !== 'image/jpeg') {
-                alert('Por favor, sube solo imágenes en formato JPG');
+            // Verificar que sea una imagen permitida
+            const allowedTypes = [
+                'image/jpeg', 'image/jpg', 'image/png', 'image/heic', 'image/heif', 'image/webp'
+            ];
+            if (!allowedTypes.includes(file.type)) {
+                alert('Por favor, sube solo imágenes en formato JPG, PNG, HEIC, HEIF o WEBP');
                 return;
             }
-            
             // Crear una URL temporal para la previsualización
             const reader = new FileReader();
             reader.onload = function(e) {
                 // Mostrar previsualización
                 imagePreview.innerHTML = `<img src="${e.target.result}" alt="Previsualización">`;
                 imagePreview.style.display = 'block';
-                
                 // Guardar la URL temporal en el campo de imagen
                 imagenJugador.value = e.target.result;
             };

@@ -7,6 +7,7 @@
     --input-border: #ddd;
     --header-bg: white;
     --shadow-color: rgba(0, 0, 0, 0.1);
+    --nombre-jugador-color: #333;
 }
 
 [data-theme="dark"] {
@@ -18,6 +19,7 @@
     --input-border: #555;
     --header-bg: #2d2d2d;
     --shadow-color: rgba(0, 0, 0, 0.3);
+    --nombre-jugador-color: #f4f4f4;
 }
 
 body {
@@ -166,7 +168,8 @@ header {
 
 .jugador-card h3 {
   margin: 10px 0;
-  color: #333;
+  color: var(--nombre-jugador-color);
+  font-weight: bold;
 }
 
 .jugador-card p {
