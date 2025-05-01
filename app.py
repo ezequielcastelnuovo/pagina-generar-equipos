@@ -164,8 +164,8 @@ def generar_equipos():
             equipo1 = equipo_actual
             equipo2 = [j for j in jugadores if j not in equipo_actual]
             
-            # Asegurarse de que los equipos tengan al menos 2 jugadores
-            if len(equipo1) < 2 or len(equipo2) < 2:
+            # Forzar que ambos equipos tengan la misma cantidad de jugadores
+            if len(equipo1) != len(equipo2):
                 return mejor_combinacion[0], mejor_combinacion[1], mejor_diferencia
                 
             diferencia = calcular_diferencia(equipo1, equipo2)
