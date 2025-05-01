@@ -145,52 +145,29 @@ def generar_equipos():
     if len(jugadores) < 4:  # Mínimo 2 jugadores por equipo
         return jsonify({"status": "error", "message": "Se necesitan al menos 4 jugadores para generar equipos"})
     
-    # Mezclar los jugadores aleatoriamente antes de ordenarlos
-    random.shuffle(jugadores)
-    
-    # Ordenar jugadores por rating
+    # Mezclar un poco la lista para dar aleatoriedad, pero mantener el balance
     jugadores_ordenados = sorted(jugadores, key=lambda x: x.rating, reverse=True)
-    
-    def calcular_diferencia(equipo1, equipo2):
-        rating1 = sum(j.rating for j in equipo1)
-        rating2 = sum(j.rating for j in equipo2)
-        return abs(rating1 - rating2)
-    
-    def generar_combinaciones(jugadores, equipo_actual, indice, mejor_combinacion, mejor_diferencia, intentos=0):
-        if intentos > 100:  # Límite de intentos para evitar bucles infinitos
-            return mejor_combinacion[0], mejor_combinacion[1], mejor_diferencia
-            
-        if indice == len(jugadores):
-            equipo1 = equipo_actual
-            equipo2 = [j for j in jugadores if j not in equipo_actual]
-            
-            # Forzar que ambos equipos tengan la misma cantidad de jugadores
-            if len(equipo1) != len(equipo2):
-                return mejor_combinacion[0], mejor_combinacion[1], mejor_diferencia
-                
-            diferencia = calcular_diferencia(equipo1, equipo2)
-            
-            # Aceptar la combinación si la diferencia es menor o igual a 5
-            if diferencia <= 5:
-                return equipo1, equipo2, diferencia
-            return mejor_combinacion[0], mejor_combinacion[1], mejor_diferencia
-        
-        # Decidir aleatoriamente si añadir el jugador al equipo 1
-        if random.random() < 0.5:
-            equipo1, equipo2, diferencia = generar_combinaciones(
-                jugadores, equipo_actual + [jugadores[indice]], indice + 1, mejor_combinacion, mejor_diferencia, intentos + 1
-            )
+    for _ in range(3):  # Tres swaps aleatorios
+        i, j = random.sample(range(len(jugadores_ordenados)), 2)
+        jugadores_ordenados[i], jugadores_ordenados[j] = jugadores_ordenados[j], jugadores_ordenados[i]
+
+    equipo1 = []
+    equipo2 = []
+    snake = True
+    for idx, jugador in enumerate(jugadores_ordenados):
+        if snake:
+            if idx % 2 == 0:
+                equipo1.append(jugador)
+            else:
+                equipo2.append(jugador)
         else:
-            equipo1, equipo2, diferencia = generar_combinaciones(
-                jugadores, equipo_actual, indice + 1, mejor_combinacion, mejor_diferencia, intentos + 1
-            )
-        
-        return equipo1, equipo2, diferencia
-    
-    # Dividir en dos equipos iguales directamente
-    mitad = len(jugadores_ordenados) // 2
-    equipo1 = jugadores_ordenados[:mitad]
-    equipo2 = jugadores_ordenados[mitad:]
+            if idx % 2 == 0:
+                equipo2.append(jugador)
+            else:
+                equipo1.append(jugador)
+        # Cambia el sentido cada vez que se llena una ronda
+        if (idx + 1) % (len(jugadores_ordenados) // 2) == 0:
+            snake = not snake
     
     # Convertir los equipos al formato necesario
     equipo1_formato = [{
